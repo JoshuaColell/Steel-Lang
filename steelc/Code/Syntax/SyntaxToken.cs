@@ -1,5 +1,5 @@
 namespace SteelCompiler.Code.Syntax {
-    public class SyntaxToken : SyntaxNode {
+    public sealed class SyntaxToken : SyntaxNode {
         public SyntaxToken(SyntaxKind kind, int positon, string text, object value) {
             Kind = kind;
             Positon = positon;

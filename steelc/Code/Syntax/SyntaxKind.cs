@@ -1,17 +1,20 @@
 namespace SteelCompiler.Code.Syntax {
     public enum SyntaxKind {
-        NumberToken,
-        NumberExpressionSyntax,
-        BinaryExpressionSyntax,
-        ParenExpression,
+        // Tokens
+        BadToken,
+        EndOfFileToken,
         WhitespaceToken,
+        NumberToken,
         PlusToken,
         MinusToken,
         StarToken,
         SlashToken,
         OpenParenToken,
         CloseParenToken,
-        EndOfFileToken,
-        BadToken,
+
+        // Expressions
+        LiteralExpressionSyntax,
+        BinaryExpressionSyntax,
+        ParenExpression,
     }
 }

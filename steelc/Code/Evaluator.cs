@@ -1,7 +1,7 @@
 using SteelCompiler.Code.Syntax;
 
 namespace SteelCompiler.Code {
-    public class Evaluator {
+    public sealed class Evaluator {
         private readonly ExpressionSyntax _root;
 
         public Evaluator(ExpressionSyntax root) {
@@ -13,8 +13,8 @@ namespace SteelCompiler.Code {
         }
 
         private int EvaluateExpression(ExpressionSyntax node) {
-            if (node is NumberExpressionSyntax n)
-                return (int) n.NumberToken.Value;
+            if (node is LiteralExpressionSyntax l)
+                return (int) l.LiteralToken.Value;
             
             if (node is BinaryExpressionSyntax b) {
                 var left = EvaluateExpression(b.Left);
