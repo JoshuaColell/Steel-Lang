@@ -16,5 +16,6 @@ namespace SteelCompiler.Code.Syntax {
         LiteralExpressionSyntax,
         BinaryExpressionSyntax,
         ParenExpression,
+        UnaryExpressionSyntax,
     }
 }

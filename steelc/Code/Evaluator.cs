@@ -16,6 +16,17 @@ namespace SteelCompiler.Code {
             if (node is LiteralExpressionSyntax l)
                 return (int) l.LiteralToken.Value;
             
+            if (node is UnaryExpressionSyntax u) {
+                var operand = EvaluateExpression(u.Operand);
+
+                if (u.OperatorToken.Kind == SyntaxKind.PlusToken)
+                    return operand;
+                else if (u.OperatorToken.Kind == SyntaxKind.MinusToken)
+                    return -operand;
+                else
+                    throw new Exception($"Unexpected unary operator {u.OperatorToken.Kind}");
+            }
+
             if (node is BinaryExpressionSyntax b) {
                 var left = EvaluateExpression(b.Left);
                 var right = EvaluateExpression(b.Right);
@@ -26,8 +37,12 @@ namespace SteelCompiler.Code {
                     return left - right;
                 else if (b.OperatorToken.Kind == SyntaxKind.StarToken)
                     return left * right;
-                else if (b.OperatorToken.Kind == SyntaxKind.SlashToken)
+                else if (b.OperatorToken.Kind == SyntaxKind.SlashToken) {
+                    if (left == 0 || right == 0) return 0;
+                    if (left == 0 && right == 0) return 0;
+                    
                     return left / right;
+                }
                 else
                     throw new Exception($"Unexpected binary operator {b.OperatorToken.Kind}");
             }

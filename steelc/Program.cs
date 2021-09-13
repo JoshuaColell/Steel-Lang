@@ -7,7 +7,7 @@ namespace SteelCompiler {
             var showTree = false;
 
             while (true) {
-                Console.Write("> ");
+                Console.Write("$> ");
                 var line = Console.ReadLine();
                 if (string.IsNullOrWhiteSpace(line))
                     return;

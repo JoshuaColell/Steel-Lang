@@ -1,3 +1,5 @@
+using SteelCompiler.Code.Syntax;
+
 namespace SteelCompiler.Code.Syntax {
     internal class Parser {
         private readonly SyntaxToken[] _tokens;
@@ -10,7 +12,7 @@ namespace SteelCompiler.Code.Syntax {
             var lexer = new Lexer(text);
             SyntaxToken token;
             do {
-                token = lexer.NextToken();
+                token = lexer.Lex();
 
                 if (token.Kind != SyntaxKind.WhitespaceToken &&
                     token.Kind != SyntaxKind.BadToken) {
@@ -34,7 +36,7 @@ namespace SteelCompiler.Code.Syntax {
 
         private SyntaxToken Current => Peek(0);
 
-        private SyntaxToken NextToken() {
+        private SyntaxToken Lex() {
             var current = Current;
             _position++;
             return current;
@@ -42,10 +44,14 @@ namespace SteelCompiler.Code.Syntax {
 
         private SyntaxToken MatchToken(SyntaxKind kind) {
             if (Current.Kind == kind)
-                return NextToken();
+                return Lex();
             
             _diagnostics.Add($"Error: Unexpected token <{Current.Kind}>, expected <{kind}>");
             return new SyntaxToken(kind, Current.Positon, null, null);
+        }
+
+        public void CreateError(string str) {
+            _diagnostics.Add($"Error: {str}");
         }
 
         public SyntaxTree Parse() {
@@ -54,39 +60,33 @@ namespace SteelCompiler.Code.Syntax {
             return new SyntaxTree(_diagnostics, expression, endOfFileToken);
         }
 
-        private ExpressionSyntax ParseExpression() {
-            return ParseTerm();
-        }
+        private ExpressionSyntax ParseExpression(int parentPrecedence = 0) {
+            ExpressionSyntax left;
+            var unaryOperatorPrecedence = Current.Kind.GetUnaryOperatorPrecedence();
+            if (unaryOperatorPrecedence != 0 && unaryOperatorPrecedence >= parentPrecedence) {
+                var operatorToken = Lex();
+                var operand = ParseExpression(unaryOperatorPrecedence);
+                left = new UnaryExpressionSyntax(operatorToken, operand);
+            } else {
+                left = ParsePrimaryExpression();
+            }
 
-        private ExpressionSyntax ParseTerm() {
-            var left = ParseFactor();
+            while (true) {
+                var precedence = Current.Kind.GetBinaryOperatorPrecedence();
+                if (precedence == 0 || precedence <= parentPrecedence)
+                    break;
+                
+                var operatorToken = Lex();
+                var right = ParseExpression(precedence);
+                left = new BinaryExpressionSyntax(left, operatorToken, right);
+            }
 
-            while (Current.Kind == SyntaxKind.PlusToken ||
-                   Current.Kind == SyntaxKind.MinusToken) {
-                       var operatorToken = NextToken();
-                       var right = ParseFactor();
-                       left = new BinaryExpressionSyntax(left, operatorToken, right);
-                   }
-            
-            return left;
-        }
-
-        private ExpressionSyntax ParseFactor() {
-            var left = ParsePrimaryExpression();
-
-            while (Current.Kind == SyntaxKind.StarToken ||
-                   Current.Kind == SyntaxKind.SlashToken) {
-                       var operatorToken = NextToken();
-                       var right = ParsePrimaryExpression();
-                       left = new BinaryExpressionSyntax(left, operatorToken, right);
-                   }
-            
             return left;
         }
 
         private ExpressionSyntax ParsePrimaryExpression() {
             if (Current.Kind == SyntaxKind.OpenParenToken) {
-                var left = NextToken();
+                var left = Lex();
                 var expression = ParseExpression();
                 var right = MatchToken(SyntaxKind.CloseParenToken);
 
