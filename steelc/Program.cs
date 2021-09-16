@@ -1,5 +1,6 @@
 ﻿using SteelCompiler.Code;
 using SteelCompiler.Code.Syntax;
+using SteelCompiler.Code.Binding;
 
 namespace SteelCompiler {
     internal static class Program {
@@ -7,15 +8,34 @@ namespace SteelCompiler {
             var showTree = false;
 
             while (true) {
-                Console.Write("$> ");
+                Console.Write("@> ");
                 var line = Console.ReadLine();
                 if (string.IsNullOrWhiteSpace(line))
-                    return;
-                
-                if (line == "#showtree") {
-                    showTree = !showTree;
-                    Console.WriteLine(showTree ? "Showing parse trees" : "Not showing parse trees anymore");
                     continue;
+                
+                if (line == "###showlangtree") {
+                    Console.WriteLine("{STEEL DEBUG FUNCTION}");
+                    continue;
+                }
+                else if (line == "###showlangtree on" || line == "###showlangtree 1" || line == "###showlangtree true") {
+                    if (showTree == true) {
+                        Console.WriteLine("Show language tree is already on! {STEEL DEBUG}");
+                        continue;
+                    } else {
+                        showTree = !showTree;
+                        Console.WriteLine("Show language tree is now on! {STEEL DEBUG}");
+                        continue;
+                    }
+                }
+                else if (line == "###showlangtree off" || line == "###showlangtree 0" || line == "###showlangtree false") {
+                    if (showTree == false) {
+                        Console.WriteLine("Show language tree is already off! {STEEL DEBUG}");
+                        continue;
+                    } else {
+                        showTree = !showTree;
+                        Console.WriteLine("Show language tree is now off! {STEEL DEBUG}");
+                        continue;
+                    }
                 }
                 else if (line == "cls" || line == "clear") {
                     Console.Clear();
@@ -23,6 +43,10 @@ namespace SteelCompiler {
                 }
 
                 var syntaxTree = SyntaxTree.Parse(line);
+                var binder = new Binder();
+                var boundExpression = binder.BindExpression(syntaxTree.Root);
+
+                var diagnostics = syntaxTree.Diagnostics.Concat(binder.Diagnostics).ToArray();
 
                 if (showTree) {
                     Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -30,8 +54,8 @@ namespace SteelCompiler {
                     Console.ResetColor();
                 }
 
-                if (!syntaxTree.Diagnostics.Any()) {
-                    var e = new Evaluator(syntaxTree.Root);
+                if (!diagnostics.Any()) {
+                    var e = new Evaluator(boundExpression);
                     var result = e.Evaluate();
                     Console.WriteLine(result);
                 }

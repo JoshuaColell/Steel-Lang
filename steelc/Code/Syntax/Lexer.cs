@@ -64,13 +64,15 @@ namespace SteelCompiler.Code.Syntax {
                     return new SyntaxToken(SyntaxKind.StarToken, _position++, "*", null);
                 case '/':
                     return new SyntaxToken(SyntaxKind.SlashToken, _position++, "/", null);
+                case '÷':
+                    return new SyntaxToken(SyntaxKind.SlashToken, _position++, "÷", null);
                 case '(':
                     return new SyntaxToken(SyntaxKind.OpenParenToken, _position++, "(", null);
                 case ')':
                     return new SyntaxToken(SyntaxKind.CloseParenToken, _position++, ")", null);
             }
 
-            _diagnostics.Add($"Error: Bad Character Input: '{Current}'");
+            _diagnostics.Add($"ERROR!!\nBad Character Input: '{Current}'");
             return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position - 1, 1), null);
         }
     }

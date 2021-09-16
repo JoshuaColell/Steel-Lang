@@ -46,12 +46,12 @@ namespace SteelCompiler.Code.Syntax {
             if (Current.Kind == kind)
                 return Lex();
             
-            _diagnostics.Add($"Error: Unexpected token <{Current.Kind}>, expected <{kind}>");
+            _diagnostics.Add($"Error!!\nUnexpected token <{Current.Kind}>, expected <{kind}>");
             return new SyntaxToken(kind, Current.Positon, null, null);
         }
 
         public void CreateError(string str) {
-            _diagnostics.Add($"Error: {str}");
+            _diagnostics.Add($"Error!!\n{str}");
         }
 
         public SyntaxTree Parse() {
