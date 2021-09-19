@@ -14,6 +14,8 @@ namespace SteelCompiler.Code.Binding {
                     return BindUnaryExpression((UnaryExpressionSyntax)syntax);
                 case SyntaxKind.BinaryExpressionSyntax:
                     return BindBinaryExpression((BinaryExpressionSyntax)syntax);
+                case SyntaxKind.ParenExpression:
+                    return BindExpression(((ParenExpressionSyntax)syntax).Expression);
                 default:
                     throw new Exception($"Unexpected syntax {syntax.Kind}");
             }
