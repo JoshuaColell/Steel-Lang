@@ -3,6 +3,8 @@ namespace SteelCompiler.Code.Binding {
         Addition,
         Subtraction,
         Multiplication,
-        Division
+        Division,
+        LogicalAnd,
+        LogicalOr
     }
 }
