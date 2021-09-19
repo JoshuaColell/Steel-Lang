@@ -20,7 +20,7 @@ namespace SteelCompiler.Code {
             if (node is BoundUnaryExpression u) {
                 var operand = EvaluateExpression(u.Operand);
 
-                switch(u.OperatorKind) {
+                switch(u.Op.Kind) {
                     case BoundUnaryOperatorKind.Identity:
                         return (int) operand;
                     case BoundUnaryOperatorKind.Negation:
@@ -28,7 +28,7 @@ namespace SteelCompiler.Code {
                     case BoundUnaryOperatorKind.LogicalNot:
                         return !(bool) operand;
                     default:
-                        throw new Exception($"Unexpected unary operator {u.OperatorKind}");
+                        throw new Exception($"Unexpected unary operator {u.Op}");
                 }
             }
 
@@ -36,7 +36,7 @@ namespace SteelCompiler.Code {
                 var left = EvaluateExpression(b.Left);
                 var right = EvaluateExpression(b.Right);
 
-                switch(b.OperatorKind) {
+                switch(b.Op.Kind) {
                     case BoundBinaryOperatorKind.Addition:
                         return (int) left + (int) right;
                     case BoundBinaryOperatorKind.Subtraction:
@@ -53,12 +53,9 @@ namespace SteelCompiler.Code {
                     case BoundBinaryOperatorKind.LogicalOr:
                         return (bool) left || (bool) right;
                     default:
-                        throw new Exception($"Unexpected binary operator {b.OperatorKind}");
+                        throw new Exception($"Unexpected binary operator {b.Op}");
                 }
             }
-
-            //if (node is ParenExpressionSyntax p)
-            //    return EvaluateExpression(p.Expression);
 
             throw new Exception($"Unexpected node {node.Kind}");
         }
