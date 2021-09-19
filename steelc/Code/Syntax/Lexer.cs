@@ -88,7 +88,10 @@ namespace SteelCompiler.Code.Syntax {
                 
                 // Boolean Operators (BO)
                 case '!':
-                    return new SyntaxToken(SyntaxKind.NotToken, _position++, "!", null);
+                    if (Lookahead == '=')
+                        return new SyntaxToken(SyntaxKind.NotEqualsToToken, _position += 2, "!=", null);
+                    else
+                        return new SyntaxToken(SyntaxKind.NotToken, _position++, "!", null);
 
                 // Other Essential Operators (OEO)
                 case '&':
@@ -98,6 +101,10 @@ namespace SteelCompiler.Code.Syntax {
                 case '|':
                     if (Lookahead == '|')
                         return new SyntaxToken(SyntaxKind.OrToken, _position += 2, "||", null);
+                    break;
+                case '=':
+                    if (Lookahead == '=')
+                        return new SyntaxToken(SyntaxKind.EqualsToToken, _position += 2, "==", null);
                     break;
             }
 

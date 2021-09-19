@@ -5,7 +5,7 @@ namespace SteelCompiler.Code.Syntax {
                     case SyntaxKind.PlusToken:
                     case SyntaxKind.MinusToken:
                     case SyntaxKind.NotToken:
-                        return 5;
+                        return 6;
                         
                     default:
                         return 0;
@@ -16,10 +16,14 @@ namespace SteelCompiler.Code.Syntax {
                 switch(kind) {
                     case SyntaxKind.StarToken:
                     case SyntaxKind.SlashToken:
-                        return 4;
+                        return 5;
                     
                     case SyntaxKind.PlusToken:
                     case SyntaxKind.MinusToken:
+                        return 4;
+                    
+                    case SyntaxKind.EqualsToToken:
+                    case SyntaxKind.NotEqualsToToken:
                         return 3;
                     
                     case SyntaxKind.AndToken:

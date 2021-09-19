@@ -7,17 +7,17 @@ namespace SteelCompiler.Code.Binding {
         {
         }
 
-        private BoundUnaryOperator(SyntaxKind syntaxKind, BoundUnaryOperatorKind kind, Type operandType, Type resultType) {
+        private BoundUnaryOperator(SyntaxKind syntaxKind, BoundUnaryOperatorKind kind, Type operandType, Type type) {
             SyntaxKind = syntaxKind;
             Kind = kind;
             OperandType = operandType;
-            ResultType = resultType;
+            Type = type;
         }
 
         public SyntaxKind SyntaxKind { get; }
         public BoundUnaryOperatorKind Kind { get; }
         public Type OperandType { get; }
-        public Type ResultType { get; }
+        public Type Type { get; }
 
         private static BoundUnaryOperator[] _operators = {
             new BoundUnaryOperator(SyntaxKind.NotToken, BoundUnaryOperatorKind.LogicalNot, typeof(bool)),

@@ -52,6 +52,10 @@ namespace SteelCompiler.Code {
                         return (bool) left && (bool) right;
                     case BoundBinaryOperatorKind.LogicalOr:
                         return (bool) left || (bool) right;
+                    case BoundBinaryOperatorKind.EqualsTo:
+                        return Equals(left, right);
+                    case BoundBinaryOperatorKind.NotEqualsTo:
+                        return !Equals(left, right);
                     default:
                         throw new Exception($"Unexpected binary operator {b.Op}");
                 }

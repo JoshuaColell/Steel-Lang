@@ -12,6 +12,8 @@ namespace SteelCompiler.Code.Syntax {
         NotToken,
         AndToken,
         OrToken,
+        EqualsToToken,
+        NotEqualsToToken,
         OpenParenToken,
         CloseParenToken,
         IdentifierToken,

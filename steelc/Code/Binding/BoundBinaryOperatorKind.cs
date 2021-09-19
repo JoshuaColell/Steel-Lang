@@ -5,6 +5,8 @@ namespace SteelCompiler.Code.Binding {
         Multiplication,
         Division,
         LogicalAnd,
-        LogicalOr
+        LogicalOr,
+        EqualsTo,
+        NotEqualsTo,
     }
 }
