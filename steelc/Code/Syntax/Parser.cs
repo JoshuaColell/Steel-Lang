@@ -85,16 +85,27 @@ namespace SteelCompiler.Code.Syntax {
         }
 
         private ExpressionSyntax ParsePrimaryExpression() {
-            if (Current.Kind == SyntaxKind.OpenParenToken) {
-                var left = Lex();
-                var expression = ParseExpression();
-                var right = MatchToken(SyntaxKind.CloseParenToken);
+            switch (Current.Kind) {
+                case SyntaxKind.OpenParenToken: {
+                        var left = Lex();
+                        var expression = ParseExpression();
+                        var right = MatchToken(SyntaxKind.CloseParenToken);
 
-                return new ParenExpressionSyntax(left, expression, right);
+                        return new ParenExpressionSyntax(left, expression, right);
+                }
+
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.TrueKeyword: {
+                        var keywordToken = Lex();
+                        var value = Current.Kind == SyntaxKind.TrueKeyword;
+                        return new LiteralExpressionSyntax(keywordToken, value);
+                }
+
+                default: {
+                    var numberToken = MatchToken(SyntaxKind.NumberToken);
+                    return new LiteralExpressionSyntax(numberToken);
+                }
             }
-
-            var numberToken = MatchToken(SyntaxKind.NumberToken);
-            return new LiteralExpressionSyntax(numberToken);
         }
     }
 }

@@ -11,6 +11,11 @@ namespace SteelCompiler.Code.Syntax {
         SlashToken,
         OpenParenToken,
         CloseParenToken,
+        IdentifierToken,
+
+        // Keywords
+        FalseKeyword,
+        TrueKeyword,
 
         // Expressions
         LiteralExpressionSyntax,
