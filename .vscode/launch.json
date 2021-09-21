@@ -10,17 +10,37 @@
       "request": "launch",
       "preLaunchTask": "build",
       // If you have changed target frameworks, make sure to update the program path.
-      "program": "${workspaceFolder}/steelc/bin/Debug/net6.0/steelc.dll",
+      "program": "${workspaceFolder}/steelc/bin/Debug/netcoreapp3.1/steelc.dll",
       "args": [],
       "cwd": "${workspaceFolder}/steelc",
       // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
       "console": "externalTerminal",
-      "stopAtEntry": false
+      "stopAtEntry": false,
+      "internalConsoleOptions": "openOnSessionStart"
     },
     {
       "name": ".NET Core Attach",
       "type": "coreclr",
-      "request": "attach"
+      "request": "attach",
+      "processId": "${command:pickProcess}"
+    },
+    {
+      "name": ".NET Core Launch (console)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/steelc/bin/Debug/netcoreapp3.1/steelc.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/steelc",
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "name": ".NET Core Attach",
+      "type": "coreclr",
+      "request": "attach",
+      "processId": "${command:pickProcess}"
     }
   ]
 }

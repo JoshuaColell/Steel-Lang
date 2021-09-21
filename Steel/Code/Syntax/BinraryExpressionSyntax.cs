@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace SteelCompiler.Code.Syntax {
     public sealed class BinaryExpressionSyntax : ExpressionSyntax {
         public BinaryExpressionSyntax(ExpressionSyntax left, SyntaxToken operatorToken, ExpressionSyntax right) {

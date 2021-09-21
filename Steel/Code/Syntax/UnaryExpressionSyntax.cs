@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace SteelCompiler.Code.Syntax {
     public sealed class UnaryExpressionSyntax : ExpressionSyntax {
         public UnaryExpressionSyntax(SyntaxToken operatorToken, ExpressionSyntax operand) {

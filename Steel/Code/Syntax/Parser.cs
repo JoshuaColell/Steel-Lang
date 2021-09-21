@@ -1,9 +1,10 @@
-using SteelCompiler.Code.Syntax;
+using System.Collections.Generic;
 
 namespace SteelCompiler.Code.Syntax {
-    internal class Parser {
+    internal sealed class Parser {
         private readonly SyntaxToken[] _tokens;
-        private List<string> _diagnostics = new List<string>();
+        
+        private DiagnosticBag _diagnostics = new DiagnosticBag();
         private int _position;
 
         public Parser(string text) {
@@ -24,7 +25,7 @@ namespace SteelCompiler.Code.Syntax {
             _diagnostics.AddRange(lexer.Diagnostics);
         }
 
-        public IEnumerable<string> Diagnostics => _diagnostics;
+        public DiagnosticBag Diagnostics => _diagnostics;
 
         private SyntaxToken Peek(int offset) {
             var index = _position + offset;
@@ -46,12 +47,8 @@ namespace SteelCompiler.Code.Syntax {
             if (Current.Kind == kind)
                 return Lex();
             
-            _diagnostics.Add($"Error!!\nUnexpected token <{Current.Kind}>, expected <{kind}>");
-            return new SyntaxToken(kind, Current.Positon, null, null);
-        }
-
-        public void CreateError(string str) {
-            _diagnostics.Add($"Error!!\n{str}");
+            _diagnostics.ReportUnexpectedToken(Current.Span, Current.Kind, kind);
+            return new SyntaxToken(kind, Current.Position, null, null);
         }
 
         public SyntaxTree Parse() {

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace SteelCompiler.Code.Syntax {
     public sealed class LiteralExpressionSyntax : ExpressionSyntax {
         public LiteralExpressionSyntax(SyntaxToken literalToken)

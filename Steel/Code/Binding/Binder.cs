@@ -1,10 +1,12 @@
+using System;
+
 using SteelCompiler.Code.Syntax;
 
 namespace SteelCompiler.Code.Binding {
     internal sealed class Binder {
-        private readonly List<string> _diagnostics = new List<string>();
+        private readonly DiagnosticBag _diagnostics = new DiagnosticBag();
 
-        public IEnumerable<string> Diagnostics => _diagnostics;
+        public DiagnosticBag Diagnostics => _diagnostics;
 
         public BoundExpression BindExpression(ExpressionSyntax syntax) {
             switch(syntax.Kind) {
@@ -30,7 +32,7 @@ namespace SteelCompiler.Code.Binding {
             var boundOperator = BoundUnaryOperator.Bind(syntax.OperatorToken.Kind, boundOperand.Type);
 
             if (boundOperator == null) {
-                _diagnostics.Add($"Error!!\nUnary operator '{syntax.OperatorToken.Text}' is not defined for type {boundOperand.Type}");
+                _diagnostics.ReportUndefinedUnaryOperator(syntax.OperatorToken.Span, syntax.OperatorToken.Text, boundOperand.Type);
                 return boundOperand;
             }
 
@@ -43,7 +45,7 @@ namespace SteelCompiler.Code.Binding {
             var boundOperator = BoundBinaryOperator.Bind(syntax.OperatorToken.Kind, boundLeft.Type, boundRight.Type);
 
             if (boundOperator == null) {
-                _diagnostics.Add($"Error!!\nBinary operator '{syntax.OperatorToken.Text}' is not defined for types {boundLeft.Type} and {boundRight.Type}");
+                _diagnostics.ReportUndefinedBinaryOperator(syntax.OperatorToken.Span, syntax.OperatorToken.Text, boundLeft.Type, boundRight.Type);
                 return boundLeft;
             }
 

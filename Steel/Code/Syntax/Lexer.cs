@@ -1,14 +1,16 @@
+using SteelCompiler.Code;
+
 namespace SteelCompiler.Code.Syntax {
     internal class Lexer {
         private readonly string _text;
         private int _position;
-        private List<string> _diagnostics = new List<string>();
+        private DiagnosticBag _diagnostics = new DiagnosticBag();
 
         public Lexer(string text) {
             _text = text;
         }
 
-        public IEnumerable<string> Diagnostics => _diagnostics;
+        public DiagnosticBag Diagnostics => _diagnostics;
 
         private char Current => Peek(0);
         private char Lookahead => Peek(1);
@@ -31,24 +33,22 @@ namespace SteelCompiler.Code.Syntax {
                 return new SyntaxToken(SyntaxKind.EndOfFileToken, _position, "\0", null);
             }
 
-            if (char.IsDigit(Current)) {
-                var start = _position;
+            var start = _position;
 
+            if (char.IsDigit(Current)) {
                 while (char.IsDigit(Current))
                     Next();
                 
                 var length = _position - start;
                 var text = _text.Substring(start, length);
                 if (!int.TryParse(text, out var value)) {
-                    _diagnostics.Add($"The number {_text} isn't be represented by an i32.");
+                    _diagnostics.ReportInvalidNumber(new TextSpan(start, length), _text, typeof(int));
                 }
 
                 return new SyntaxToken(SyntaxKind.NumberToken, start, text, value);
             }
 
             if (char.IsWhiteSpace(Current)) {
-                var start = _position;
-
                 while (char.IsWhiteSpace(Current))
                     Next();
                 
@@ -58,8 +58,6 @@ namespace SteelCompiler.Code.Syntax {
             }
 
             if (char.IsLetter(Current)) {
-                var start = _position;
-
                 while (char.IsLetter(Current))
                     Next();
 
@@ -88,27 +86,35 @@ namespace SteelCompiler.Code.Syntax {
                 
                 // Boolean Operators (BO)
                 case '!':
-                    if (Lookahead == '=')
-                        return new SyntaxToken(SyntaxKind.NotEqualsToToken, _position += 2, "!=", null);
+                    if (Lookahead == '=') {
+                        _position += 2;
+                        return new SyntaxToken(SyntaxKind.NotEqualsToToken, start, "!=", null);
+                    }
                     else
                         return new SyntaxToken(SyntaxKind.NotToken, _position++, "!", null);
 
                 // Other Essential Operators (OEO)
                 case '&':
-                    if (Lookahead == '&')
-                        return new SyntaxToken(SyntaxKind.AndToken, _position += 2, "&&", null);
+                    if (Lookahead == '&') {
+                        _position += 2;
+                        return new SyntaxToken(SyntaxKind.AndToken, start, "&&", null);
+                    }
                     break;
                 case '|':
-                    if (Lookahead == '|')
-                        return new SyntaxToken(SyntaxKind.OrToken, _position += 2, "||", null);
+                    if (Lookahead == '|') {
+                        _position += 2;
+                        return new SyntaxToken(SyntaxKind.OrToken, start, "||", null);
+                    }
                     break;
                 case '=':
-                    if (Lookahead == '=')
-                        return new SyntaxToken(SyntaxKind.EqualsToToken, _position += 2, "==", null);
+                    if (Lookahead == '=') {
+                        _position += 2;
+                        return new SyntaxToken(SyntaxKind.EqualsToToken, start, "==", null);
+                    }
                     break;
             }
 
-            _diagnostics.Add($"ERROR!!\nBad Character Input: '{Current}'");
+            _diagnostics.ReportBadCharacter(_position, Current);
             return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position - 1, 1), null);
         }
     }

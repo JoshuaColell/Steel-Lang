@@ -1,3 +1,5 @@
+using System;
+
 namespace SteelCompiler.Code.Binding {
     internal sealed class BoundLiteralExpression : BoundExpression {
         public BoundLiteralExpression(object value) {
