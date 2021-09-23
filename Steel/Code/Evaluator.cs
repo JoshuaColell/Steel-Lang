@@ -44,6 +44,19 @@ namespace SteelCompiler.Code {
                         return (int) left - (int) right;
                     case BoundBinaryOperatorKind.Multiplication:
                         return (int) left * (int) right;
+                    case BoundBinaryOperatorKind.Modulation:
+                        if ((int) left == 0 || (int) right == 0) return 0;
+                        if ((int) left == 0 && (int) right == 0) return 0;
+
+                        return (int) left % (int) right;
+                    case BoundBinaryOperatorKind.Powering:
+                        if ((int) left == 0 || (int) right == 0) return 0;
+                        if ((int) left == 0 && (int) right == 0) return 0;
+
+                        double leftDoubled = Convert.ToDouble(left);
+                        double rightDoubled = Convert.ToDouble(right);
+
+                        return Math.Pow((double)leftDoubled, (double)rightDoubled);
                     case BoundBinaryOperatorKind.Division:
                         if ((int) left == 0 || (int) right == 0) return 0;
                         if ((int) left == 0 && (int) right == 0) return 0;

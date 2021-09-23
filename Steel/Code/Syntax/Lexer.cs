@@ -73,8 +73,12 @@ namespace SteelCompiler.Code.Syntax {
                     return new SyntaxToken(SyntaxKind.PlusToken, _position++, "+", null);
                 case '-':
                     return new SyntaxToken(SyntaxKind.MinusToken, _position++, "-", null);
+                case '^':
+                    return new SyntaxToken(SyntaxKind.PowerToken, _position++, "^", null);
                 case '*':
                     return new SyntaxToken(SyntaxKind.StarToken, _position++, "*", null);
+                case '%':
+                    return new SyntaxToken(SyntaxKind.ModularToken, _position++, "%", null);
                 case '/':
                     return new SyntaxToken(SyntaxKind.SlashToken, _position++, "/", null);
                 case '÷':

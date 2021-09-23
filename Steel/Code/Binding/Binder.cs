@@ -79,8 +79,12 @@ namespace SteelCompiler.Code.Binding {
                         return BoundBinaryOperatorKind.Addition;
                     case SyntaxKind.MinusToken:
                         return BoundBinaryOperatorKind.Subtraction;
+                    case SyntaxKind.PowerToken:
+                        return BoundBinaryOperatorKind.Powering;
                     case SyntaxKind.StarToken:
                         return BoundBinaryOperatorKind.Multiplication;
+                    case SyntaxKind.ModularToken:
+                        return BoundBinaryOperatorKind.Modulation;
                     case SyntaxKind.SlashToken:
                         return BoundBinaryOperatorKind.Division;
                 }

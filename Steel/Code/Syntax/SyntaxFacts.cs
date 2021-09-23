@@ -14,7 +14,11 @@ namespace SteelCompiler.Code.Syntax {
 
         public static int GetBinaryOperatorPrecedence(this SyntaxKind kind) {
                 switch(kind) {
+                    case SyntaxKind.PowerToken:
+                        return 6;
+
                     case SyntaxKind.StarToken:
+                    case SyntaxKind.ModularToken:
                     case SyntaxKind.SlashToken:
                         return 5;
                     

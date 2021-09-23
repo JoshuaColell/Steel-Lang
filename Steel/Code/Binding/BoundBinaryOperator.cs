@@ -31,7 +31,9 @@ namespace SteelCompiler.Code.Binding {
         private static BoundBinaryOperator[] _operators = {
             new BoundBinaryOperator(SyntaxKind.PlusToken, BoundBinaryOperatorKind.Addition, typeof(int)),
             new BoundBinaryOperator(SyntaxKind.MinusToken, BoundBinaryOperatorKind.Subtraction, typeof(int)),
+            new BoundBinaryOperator(SyntaxKind.PowerToken, BoundBinaryOperatorKind.Powering, typeof(int)),
             new BoundBinaryOperator(SyntaxKind.StarToken, BoundBinaryOperatorKind.Multiplication, typeof(int)),
+            new BoundBinaryOperator(SyntaxKind.ModularToken, BoundBinaryOperatorKind.Modulation, typeof(int)),
             new BoundBinaryOperator(SyntaxKind.SlashToken, BoundBinaryOperatorKind.Division, typeof(int)),
             new BoundBinaryOperator(SyntaxKind.EqualsToToken, BoundBinaryOperatorKind.EqualsTo, typeof(int), typeof(bool)),
             new BoundBinaryOperator(SyntaxKind.NotEqualsToToken, BoundBinaryOperatorKind.NotEqualsTo, typeof(int), typeof(bool)),
